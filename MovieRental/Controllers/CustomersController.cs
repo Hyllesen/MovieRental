@@ -67,8 +67,6 @@ namespace MovieRental.Controllers
             if (customer == null)
                 return HttpNotFound();
 
-            var membershipType = customer.MembershipType.Name;
-
             return View(customer);
         }
 

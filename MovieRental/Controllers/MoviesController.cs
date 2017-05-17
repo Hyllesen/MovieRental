@@ -44,15 +44,20 @@ namespace Vidly.Controllers
             return View(viewModel);
         }
 
-        [Route("movies/released/{year}/{month:regex(\\d{2}):range(1,12)}")]
-        public ActionResult ByReleaseDate(int year, int month)
+        public ActionResult Edit(int id)
         {
-            return Content(year + "/" + month);
-        }
-        
-        public ActionResult Edit(int movieId)
-        {
-            return Content("id=" + movieId);
+            var movie = _context.Movies.SingleOrDefault(p => p.Id == id);
+
+            if (movie == null)
+                return HttpNotFound();
+
+            var viewModel = new MoviesFormViewModel()
+            {
+                Movie = movie,
+                Genres = _context.Genres.ToList()
+            };
+
+            return View("MovieForm", viewModel);
         }
 
         public ActionResult Index()
