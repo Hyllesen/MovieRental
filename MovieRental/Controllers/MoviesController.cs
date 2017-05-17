@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MovieRental.Models;
+using MovieRental.ViewModels;
 using Vidly.Models;
 using Vidly.ViewModels;
 
@@ -73,7 +74,36 @@ namespace Vidly.Controllers
 
         public ActionResult New()
         {
-            return View("Details");
+            var genres = _context.Genres.ToList();
+
+            var movie = new MoviesFormViewModel()
+            {
+                Genres = genres
+            };
+            
+            return View("MovieForm", movie);
+        }
+
+        public ActionResult Save(Movie movie)
+        {
+            if (movie.Id == 0)
+            {
+                movie.DateAdded = DateTime.Now;
+                _context.Movies.Add(movie);
+            }
+            else
+            {
+                var movieInDb = _context.Movies.Single(c => c.Id == movie.Id);
+
+                movieInDb.Name = movie.Name;
+                movieInDb.DateAdded = DateTime.Now;
+                movieInDb.ReleaseDate = movie.ReleaseDate;
+                movieInDb.NumberInStock = movie.NumberInStock;
+                movieInDb.Genre = movie.Genre;
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Movies");
         }
     }
 }

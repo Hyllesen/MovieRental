@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
-using System.Web.Routing;
 using MovieRental.Models;
 using Vidly.Models;
 using Vidly.ViewModels;
 using System.Data.Entity;
 using MovieRental.ViewModels;
 
-namespace Vidly.Controllers
+namespace MovieRental.Controllers
 {
     public class CustomersController : Controller
     {
