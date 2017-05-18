@@ -76,21 +76,29 @@ namespace Vidly.Controllers
 
             return View(movies);
         }
-
+        
         public ActionResult New()
         {
             var genres = _context.Genres.ToList();
 
             var movie = new MoviesFormViewModel()
             {
-                Genres = genres
+                Genres = genres,
+                Movie = new Movie()
             };
             
             return View("MovieForm", movie);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Movie movie)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new MoviesFormViewModel();
+                return View("MovieForm", viewModel);
+            }
             if (movie.Id == 0)
             {
                 movie.DateAdded = DateTime.Now;

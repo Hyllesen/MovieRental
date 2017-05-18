@@ -21,6 +21,8 @@ namespace Vidly.Models
         public DateTime ReleaseDate { get; set; }
         [Required]
         public DateTime DateAdded { get; set; }
+
+        [Range(1,20)]
         [Required]
         public byte NumberInStock { get; set; }
     }

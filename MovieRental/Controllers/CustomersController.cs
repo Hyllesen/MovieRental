@@ -29,12 +29,17 @@ namespace MovieRental.Controllers
             var customers = _context.Customers.Include(c => c.MembershipType).ToList();
             return View(customers);
         }
-
+        
         public ActionResult New()
         {
             var membershipTypes = _context.MembershipTypes.ToList();
-            var viewModel = new customerFormViewModel()
+            var customer = new Customer()
             {
+                Id = 0
+            };
+            var viewModel = new CustomerFormViewModel()
+            {
+                Customer = customer,
                 MembershipTypes = membershipTypes
             };
 
@@ -42,8 +47,19 @@ namespace MovieRental.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Customer customer)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel()
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+
+                return View("CustomerForm", viewModel);
+            }
             if (customer.Id == 0)
                 _context.Customers.Add(customer);
             else
@@ -77,7 +93,7 @@ namespace MovieRental.Controllers
             if (customer == null)
                 return HttpNotFound();
 
-            var viewModel = new customerFormViewModel()
+            var viewModel = new CustomerFormViewModel()
             {
                 Customer = customer,
                 MembershipTypes = _context.MembershipTypes.ToList()
